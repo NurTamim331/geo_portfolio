@@ -149,7 +149,7 @@ export default function InquiryForm({ prefilledDestination }) {
                   required
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="e.g. +880 1712-345678"
+                  placeholder="e.g. +88 01913-389573"
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue-600/30 focus:border-brand-blue-600 transition"
                 />
               </div>
@@ -192,10 +192,12 @@ export default function InquiryForm({ prefilledDestination }) {
                   onChange={handleChange}
                   className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue-600/30 focus:border-brand-blue-600 transition"
                 >
-                  <option value="Singapore">Singapore (5,500 BDT)</option>
-                  <option value="Thailand">Thailand (5,500 BDT)</option>
+                  <option value="Singapore">Singapore (7,000 BDT)</option>
+                  <option value="Thailand">Thailand (7,000 BDT)</option>
                   <option value="Malaysia">Malaysia (5,500 BDT)</option>
-                  <option value="India">India (5,500 BDT)</option>
+                  <option value="China">China (Dynamic quote)</option>
+                  <option value="Canada">Canada (10,000 BDT)</option>
+                  <option value="Australia">Australia (10,000 BDT)</option>
                   <option value="Other">Other Destination</option>
                 </select>
               </div>

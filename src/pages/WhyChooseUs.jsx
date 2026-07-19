@@ -107,11 +107,11 @@ export default function WhyChooseUs({ onNavigate }) {
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10 pt-2">
           <a
-            href="tel:+8801712345678"
+            href="tel:+8801913389573"
             className="w-full sm:w-auto px-6 py-3.5 bg-brand-green-500 hover:bg-brand-green-600 text-brand-dark font-extrabold text-sm rounded-xl transition cursor-pointer shadow-md flex items-center justify-center gap-1.5"
           >
             <PhoneCall className="h-4.5 w-4.5" />
-            <span>Call +880 1712-345678</span>
+            <span>Call +880 1913-389573</span>
           </a>
           
           <button

@@ -94,23 +94,29 @@ export default function Footer({ setActivePage }) {
               <div className="flex items-start gap-2.5">
                 <MapPin className="h-5 w-5 text-brand-green-500 shrink-0 mt-0.5" />
                 <span>
-                  Suit #1204, Concord Tower,<br />
-                  Kazi Nazrul Islam Avenue, Shahbagh,<br />
+                  154 C/A, Motijheel,<br />
                   Dhaka - 1000, Bangladesh
                 </span>
               </div>
               
-              <div className="flex items-center gap-2.5">
-                <Phone className="h-4 w-4 text-brand-green-500" />
-                <a href="tel:+8801712345678" className="hover:text-brand-green-500 transition duration-200">
-                  +880 1712-345678
-                </a>
+              <div className="flex flex-col gap-1 pl-7.5">
+                <div className="flex items-center gap-2.5 -ml-7.5">
+                  <Phone className="h-4 w-4 text-brand-green-500" />
+                  <a href="tel:+8801913389573" className="hover:text-brand-green-500 transition duration-200">
+                    +880 1913-389573
+                  </a>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <a href="tel:+8801611204561" className="hover:text-brand-green-500 transition duration-200">
+                    +880 1611-204561
+                  </a>
+                </div>
               </div>
 
               <div className="flex items-center gap-2.5">
                 <Mail className="h-4 w-4 text-brand-green-500" />
-                <a href="mailto:info@geotrips.com" className="hover:text-brand-green-500 transition duration-200">
-                  info@geotrips.com
+                <a href="mailto:geotrips19@gmail.com" className="hover:text-brand-green-500 transition duration-200">
+                  geotrips19@gmail.com
                 </a>
               </div>
 
@@ -134,14 +140,14 @@ export default function Footer({ setActivePage }) {
           
           <div className="flex gap-4">
             <a
-              href="tel:+8801712345678"
+              href="tel:+8801913389573"
               className="flex items-center gap-1 hover:text-brand-green-500 transition duration-200"
             >
               <Phone className="h-3 w-3" />
               <span>Call Support</span>
             </a>
             <a
-              href="https://wa.me/8801712345678"
+              href="https://wa.me/8801913389573"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 hover:text-brand-green-500 transition duration-200"

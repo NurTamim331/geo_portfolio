@@ -77,7 +77,7 @@ export default function App() {
             <span>GEO Trips: Trusted corporate travel consultant & visa screening center for 25+ years.</span>
           </div>
           <div className="flex items-center gap-4 text-brand-green-500">
-            <span>Direct Desk: +880 2-9876543</span>
+            <span>Hotline: +88 01913-389573</span>
             <span>Support: Sat - Thu (9AM - 6PM)</span>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function App() {
 
         {/* WhatsApp Call Widget */}
         <a
-          href="https://wa.me/8801712345678"
+          href="https://wa.me/8801913389573"
           target="_blank"
           rel="noopener noreferrer"
           className="p-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-xl transition duration-200 flex items-center justify-center hover:scale-105"
@@ -127,7 +127,7 @@ export default function App() {
 
         {/* Direct Call Widget */}
         <a
-          href="tel:+8801712345678"
+          href="tel:+8801913389573"
           className="p-3.5 bg-brand-blue-600 hover:bg-brand-blue-700 text-white rounded-full shadow-xl transition duration-200 flex items-center justify-center hover:scale-105"
           title="Call Hotline"
         >

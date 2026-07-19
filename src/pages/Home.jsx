@@ -50,11 +50,11 @@ export default function Home({ onNavigate, onApply }) {
               </button>
               
               <a
-                href="tel:+8801712345678"
+                href="tel:+8801913389573"
                 className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold text-base rounded-xl border border-white/10 hover:border-white/20 transition duration-200 flex items-center justify-center gap-2"
               >
                 <PhoneCall className="h-5 w-5 text-brand-green-500" />
-                <span>Call +880 1712-345678</span>
+                <span>Call +880 1913-389573</span>
               </a>
             </div>
 
@@ -139,10 +139,10 @@ export default function Home({ onNavigate, onApply }) {
               
               <div className="space-y-4">
                 {[
-                  { name: 'Singapore e-Visa', fee: '5,500 BDT', speed: '10 Days' },
-                  { name: 'Thailand Tourist Visa', fee: '5,500 BDT', speed: '7 Days' },
+                  { name: 'Singapore Visa', fee: '7,000 BDT', speed: '10 Days' },
+                  { name: 'Thailand Tourist Visa', fee: '7,000 BDT', speed: '7 Days' },
                   { name: 'Malaysia Tour Visa', fee: '5,500 BDT', speed: '4 Days' },
-                  { name: 'India Entry/Tour Visa', fee: '5,500 BDT', speed: '12 Days' }
+                  { name: 'China Tourist Visa', fee: 'Call for Quote', speed: '12-20 Days' }
                 ].map((item, idx) => (
                   <div key={idx} className="flex justify-between items-center p-3.5 bg-slate-50 rounded-xl border border-gray-100 hover:border-brand-green-200 transition">
                     <div>
@@ -150,7 +150,7 @@ export default function Home({ onNavigate, onApply }) {
                       <span className="text-[11px] text-gray-500 font-semibold">{item.speed} processing</span>
                     </div>
                     <div className="text-right">
-                      <span className="block font-display font-extrabold text-sm text-brand-blue-600">{item.fee}</span>
+                      <span className="block font-display font-extrabold text-xs sm:text-sm text-brand-blue-600">{item.fee}</span>
                       <button 
                         onClick={() => onApply(item.name.split(' ')[0])}
                         className="text-[10px] text-brand-green-600 hover:underline font-bold"
@@ -184,7 +184,7 @@ export default function Home({ onNavigate, onApply }) {
             
             <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
               <a
-                href="https://wa.me/8801712345678"
+                href="https://wa.me/8801913389573"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto text-center px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg transition duration-200 cursor-pointer"

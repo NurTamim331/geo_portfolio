@@ -28,7 +28,7 @@ export default function AboutUs({ onNavigate }) {
           A Quarter-Century of <span className="text-brand-green-500">Travel Expertise</span>
         </h1>
         <p className="text-gray-500 text-base sm:text-lg leading-relaxed">
-          Founded in 2001, GEO Trips has developed from a small local agency into one of Dhaka's most respected corporate travel assistance providers.
+          GEO Trips is a premier travel agency run by <strong>Md Mesbah Uddin</strong>, a certified travel agent for <strong>Singapore Airlines</strong> and <strong>Bangladesh Biman</strong>. With over 25 years of experience, we serve corporate and personal travelers with absolute dedication and trust from our Motijheel head office.
         </p>
       </div>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Clock, MessageSquare, ShieldAlert } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageSquare } from 'lucide-react';
 import InquiryForm from '../components/InquiryForm';
 
 export default function ContactUs({ prefilledDestination }) {
@@ -37,8 +37,8 @@ export default function ContactUs({ prefilledDestination }) {
                 <div>
                   <span className="block font-bold text-brand-dark">Office Address</span>
                   <span className="text-gray-500 text-sm">
-                    Suit #1204, Concord Tower, Kazi Nazrul Islam Avenue,<br />
-                    Shahbagh, Dhaka - 1000, Bangladesh
+                    154 C/A, Motijheel,<br />
+                    Dhaka - 1000, Bangladesh
                   </span>
                 </div>
               </div>
@@ -46,10 +46,15 @@ export default function ContactUs({ prefilledDestination }) {
               <div className="flex items-start gap-3.5">
                 <Phone className="h-5 w-5 text-brand-green-500 shrink-0 mt-0.5" />
                 <div>
-                  <span className="block font-bold text-brand-dark">Telephone Hotline</span>
-                  <a href="tel:+8801712345678" className="text-brand-blue-600 hover:underline text-sm font-semibold">
-                    +880 1712-345678 (24/7 Priority Support)
-                  </a>
+                  <span className="block font-bold text-brand-dark">Telephone Hotlines</span>
+                  <div className="space-y-1 text-sm font-semibold text-brand-blue-600">
+                    <a href="tel:+8801913389573" className="hover:underline block">
+                      +880 1913-389573
+                    </a>
+                    <a href="tel:+8801611204561" className="hover:underline block">
+                      +880 1611-204561
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -58,11 +63,8 @@ export default function ContactUs({ prefilledDestination }) {
                 <div>
                   <span className="block font-bold text-brand-dark">Email Correspondence</span>
                   <div className="space-y-0.5 text-sm">
-                    <a href="mailto:info@geotrips.com" className="text-brand-blue-600 hover:underline block font-semibold">
-                      info@geotrips.com (Corporate Queries)
-                    </a>
-                    <a href="mailto:visas@geotrips.com" className="text-brand-blue-600 hover:underline block font-semibold">
-                      visas@geotrips.com (Visa Dossier Desk)
+                    <a href="mailto:geotrips19@gmail.com" className="text-brand-blue-600 hover:underline block font-semibold">
+                      geotrips19@gmail.com
                     </a>
                   </div>
                 </div>
@@ -86,14 +88,14 @@ export default function ContactUs({ prefilledDestination }) {
           <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm h-80 relative flex flex-col justify-end">
             <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-8 text-center space-y-3">
               <MapPin className="h-10 w-10 text-brand-blue-600 animate-bounce" />
-              <span className="block font-display font-bold text-gray-800">Concord Tower, Shahbagh</span>
+              <span className="block font-display font-bold text-gray-800">Motijheel C/A, Dhaka</span>
               <p className="text-xs text-gray-500 max-w-xs">
-                Conveniently located in the heart of Dhaka, near Shahbagh Intersection and Hotel InterContinental.
+                Conveniently located in the heart of Dhaka's commercial center at 154 Motijheel C/A.
               </p>
               
               {/* Google Map Mock Button */}
               <a 
-                href="https://maps.google.com/?q=Concord+Tower+Dhaka"
+                href="https://maps.google.com/?q=154+Motijheel+Dhaka"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-brand-blue-600 hover:bg-brand-blue-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
@@ -103,7 +105,7 @@ export default function ContactUs({ prefilledDestination }) {
             </div>
             
             <div className="bg-brand-dark/95 text-white p-3.5 text-xs text-center z-10 font-medium">
-              Visitor Parking Available in Basements 1 & 2
+              Motijheel Commercial District Parking Available
             </div>
           </div>
 

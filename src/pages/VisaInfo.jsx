@@ -1,82 +1,143 @@
 import React from 'react';
-import { DollarSign, Clock, CheckSquare, Eye, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Clock, CheckSquare, Eye, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function VisaInfo({ onOpenModal, onApply }) {
   const visas = [
     {
       country: 'Singapore',
-      price: '5500',
+      price: '7,000',
       time: '10 Working Days',
-      photoType: '2 Copy recent picture MAT PAPER',
+      photoType: '2 color photos on matte paper',
       bgGradient: 'from-blue-600/5 to-cyan-500/5',
       documents: [
-        'Valid Passport with 6 months validity',
-        '2 Copy recent picture MAT PAPER',
-        'Bank Salary Statement (06 month)',
-        'Personal Bank Statement AND 3 Month Salary Pay Slip.',
+        'Passport validity: ≥ 6 months',
+        '2 recent color photographs on matte paper',
+        'Bank Salary Statement (6 months) OR Personal Bank Statement + 3 months\' salary pay slip',
         'Bank Solvency Certificate',
-        'NOC Letter From Office',
-        'Visiting Card',
-        'Office ID Card copy',
-        'Old Passport [If Any]',
-        'Student Id Card and Tuition fee receipt [For student]'
+        'NOC letter from office',
+        'Visiting card',
+        'National ID (NID) card',
+        'Office ID card copy',
+        'Old passport (if any)',
+        'For Businessmen: Trade license with notary',
+        'Housewives: Only 2 photographs (no other documents required)',
+        'Students: Student ID card / school salary books photocopy',
+        'Children: Birth certificate'
       ]
     },
     {
       country: 'Thailand',
-      price: '5500',
+      price: '7,000',
       time: '7 Working Days',
-      photoType: '2 Copy recent picture [4.5 X 3.5]',
+      photoType: '2 color photos on matte paper',
       bgGradient: 'from-orange-600/5 to-red-500/5',
       documents: [
-        'Valid Passport with 6 months validity',
-        '2 Copy recent picture [4.5 X 3.5 ]',
-        'Bank Salary Statement (06 month)',
-        'Personal Bank Statement and 3 Month Salary Pay Slip [Job Holder]',
+        'Passport validity: ≥ 6 months',
+        '2 recent color photographs on matte paper',
+        'Bank Salary Statement (6 months) OR Personal Bank Statement + 3 months\' salary pay slip',
         'Bank Solvency Certificate',
-        'NOC Letter From Office [2 copy on office pad]',
-        'Visiting Card',
-        'Office ID Card copy',
-        'Old Passport [If Any]',
-        'Student Id Card and Tuition fee receipt [For student]'
+        'NOC letter from office',
+        'Visiting card',
+        'National ID (NID) card',
+        'Office ID card copy',
+        'Old passport (if any)',
+        'For Businessmen: Trade license with notary',
+        'Housewives: Only 2 photographs (no other documents required)',
+        'Students: Student ID card / school salary books photocopy',
+        'Children: Birth certificate'
       ]
     },
     {
       country: 'Malaysia',
-      price: '5500',
+      price: '5,500',
       time: '4 Working Days',
-      photoType: '2 Copy recent picture [4.5 X 3.5]',
+      photoType: '2 color photos on matte paper',
       bgGradient: 'from-emerald-600/5 to-teal-500/5',
       documents: [
-        'Valid Passport with 6 months validity',
-        '2 Copy recent picture [4.5 X 3.5 ]',
-        'Bank Salary Statement (06 month)',
-        'Personal Bank Statement and 3 Month Salary Pay Slip [Job Holder]',
+        'Passport validity: ≥ 6 months',
+        '2 recent color photographs on matte paper',
+        'Bank Salary Statement (6 months) OR Personal Bank Statement + 3 months\' salary pay slip',
         'Bank Solvency Certificate',
-        'NOC Letter From Office [2 copy on office pad]',
-        'Visiting Card',
-        'Office ID Card copy',
-        'Old Passport [If Any]',
-        'Student Id Card and Tuition fee receipt [For student]'
+        'NOC letter from office',
+        'Visiting card',
+        'National ID (NID) card',
+        'Office ID card copy',
+        'Old passport (if any)',
+        'For Businessmen: Trade license with notary',
+        'Housewives: Only 2 photographs (no other documents required)',
+        'Students: Student ID card / school salary books photocopy',
+        'Children: Birth certificate'
       ]
     },
     {
-      country: 'India',
-      price: '5500',
-      time: '12 Working Days',
-      photoType: '2 Copy recent picture [4.5 X 3.5]',
+      country: 'China',
+      price: 'Dynamic (Call/Meeting)',
+      time: '12–20 Working Days',
+      photoType: '35 × 45 mm white background matte paper',
       bgGradient: 'from-rose-600/5 to-pink-500/5',
       documents: [
-        'Valid Passport with 6 months validity',
-        '2 Copy recent picture [4.5 X 3.5 ]',
-        'Bank Salary Statement (06 month)',
-        'Personal Bank Statement and 3 Month Salary Pay Slip [Job Holder]',
-        'Bank Solvency Certificate',
-        'NOC Letter From Office [2 copy on office pad]',
+        'Current and previous passport (minimum 8 months validity)',
+        'Photo: 35 × 45 mm, matte paper, white background (ears, eyes, and shoulders visible)',
+        'Bank statement + solvency certificate: 3 lacs minimum (signed by bank authority; no e-statements)',
+        'Additional family member: +1 lac per person',
+        'Job holder: NOC, Salary Certificate, Visiting Card, ID Card',
+        'Business person: Trade License, Company pad, Visiting Card',
+        'Student: Institutional NOC, Student ID card',
+        'Doctor: BMDC Certificate, Visiting Card, NOC/Company pad',
+        'Lawyer: Bar Council Certificate, Visiting Card, NOC/Company pad',
+        'Retired person: Retirement letter or pension book',
+        'TIN Certificate',
+        'Confirmed air ticket',
+        'Marriage & Birth certificate for children (if applicable)',
+        'Invitation Letter (if any)',
+        'Police GD copy (if passport lost previously)',
+        'Terms: In case of rejection, embassy fee and refund charges are paid by the applicant'
+      ]
+    },
+    {
+      country: 'Canada',
+      price: '10,000',
+      time: 'Consulate Timeline',
+      photoType: '35 × 45 mm photos',
+      bgGradient: 'from-purple-600/5 to-indigo-500/5',
+      documents: [
+        'Original passport',
+        'Application processing fee: 10,000 BDT',
+        'TIN & Tax Certificate',
+        'Bank statement (last 6 months) & Bank Solvency Certificate',
+        'F.D.R Statement',
+        'Supporting documents (car, share, land, flat registry etc. if any)',
+        'National ID Card and Birth Certificate',
         'Visiting Card',
-        'Office ID Card copy',
-        'Old Passport [If Any]',
-        'Student Id Card and Tuition fee receipt [For student]'
+        'Invitation Letter + Passport copy + Tenant Agreement + Professional docs OR Hotel Booking',
+        'Marriage Certificate & Vaccination Certificate',
+        'Photo: 35 × 45 mm',
+        'Professional documents (as per occupation)',
+        'Family details: Father, Mother, Children, Sister, Brother, Spouse names, DOB, and addresses',
+        'Employment start date & Education details (last institution name, course, session)'
+      ]
+    },
+    {
+      country: 'Australia',
+      price: '10,000',
+      time: 'Consulate Timeline',
+      photoType: '35 × 45 mm photos',
+      bgGradient: 'from-teal-600/5 to-cyan-500/5',
+      documents: [
+        'Original passport',
+        'Application processing fee: 10,000 BDT',
+        'TIN & Tax Certificate',
+        'Bank statement (last 6 months) & Bank Solvency Certificate',
+        'F.D.R Statement',
+        'Supporting documents (car, share, land, flat registry etc. if any)',
+        'National ID Card and Birth Certificate',
+        'Visiting Card',
+        'Invitation Letter + Passport copy + Tenant Agreement + Professional docs OR Hotel Booking',
+        'Marriage Certificate & Vaccination Certificate',
+        'Photo: 35 × 45 mm',
+        'Professional documents (as per occupation)',
+        'Family details: Father, Mother, Children, Sister, Brother, Spouse names, DOB, and addresses',
+        'Employment start date & Education details (last institution name, course, session)'
       ]
     }
   ];
@@ -98,18 +159,18 @@ export default function VisaInfo({ onOpenModal, onApply }) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {visas.map((visa, idx) => (
           <div 
             key={idx} 
             className={`bg-gradient-to-br ${visa.bgGradient} rounded-3xl border border-gray-100 p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-lg transition duration-300 relative overflow-hidden`}
           >
             {/* Price tag */}
-            <div className="absolute top-6 right-6 px-4 py-2 bg-brand-blue-600/10 border border-brand-blue-600/20 text-brand-blue-700 font-display font-extrabold text-lg sm:text-xl rounded-xl">
-              {visa.price} BDT
+            <div className="absolute top-6 right-6 px-4 py-2 bg-brand-blue-600/10 border border-brand-blue-600/20 text-brand-blue-700 font-display font-extrabold text-[11px] sm:text-xs rounded-xl max-w-[60%] text-center leading-tight">
+              {visa.price === 'Dynamic (Call/Meeting)' ? 'Call for Quote' : `${visa.price} BDT`}
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 pt-4">
               <div>
                 <h3 className="font-display font-black text-2xl sm:text-3xl text-brand-dark">
                   {visa.country}
@@ -117,7 +178,7 @@ export default function VisaInfo({ onOpenModal, onApply }) {
                 
                 <div className="flex items-center gap-1.5 text-xs text-brand-green-600 font-semibold mt-1">
                   <Clock className="h-4 w-4 shrink-0" />
-                  <span>Processing Time: {visa.time}</span>
+                  <span>Processing: {visa.time}</span>
                 </div>
               </div>
 
@@ -130,7 +191,7 @@ export default function VisaInfo({ onOpenModal, onApply }) {
                 <ul className="text-xs sm:text-sm text-gray-600 space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckSquare className="h-4 w-4 text-brand-blue-600 shrink-0 mt-0.5" />
-                    <span><strong>Validity:</strong> Passport with at least 6 months validity.</span>
+                    <span><strong>Validity:</strong> passport validity is required.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckSquare className="h-4 w-4 text-brand-blue-600 shrink-0 mt-0.5" />
@@ -138,7 +199,7 @@ export default function VisaInfo({ onOpenModal, onApply }) {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckSquare className="h-4 w-4 text-brand-blue-600 shrink-0 mt-0.5" />
-                    <span><strong>Financing:</strong> 6 months bank statement + solvency.</span>
+                    <span><strong>Financing:</strong> Bank statements + Solvency Certificate.</span>
                   </li>
                 </ul>
               </div>
@@ -178,16 +239,16 @@ export default function VisaInfo({ onOpenModal, onApply }) {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300">
           <div className="space-y-1">
-            <span className="block font-bold text-white text-base">Expert Consultation</span>
-            <p className="text-xs text-gray-400 leading-relaxed">We evaluate your bank balances, travel history, and profession to suggest documentation fixes before submission.</p>
+            <span className="block font-bold text-white text-base">Expert Pre-Screening</span>
+            <p className="text-xs text-gray-400 leading-relaxed">We double-verify trade licenses, salary slips, and company NOC letterheads to match exact consular criteria before submission.</p>
           </div>
           <div className="space-y-1">
-            <span className="block font-bold text-white text-base">Dedicated Courier Desk</span>
-            <p className="text-xs text-gray-400 leading-relaxed">For corporate partners, we collect and return passports to your head office using secure logistics officers.</p>
+            <span className="block font-bold text-white text-base">Corporate Pickup Desk</span>
+            <p className="text-xs text-gray-400 leading-relaxed">For registered corporate partners inside Dhaka, we collect travel dossiers directly from your administrative offices.</p>
           </div>
           <div className="space-y-1">
-            <span className="block font-bold text-white text-base">Zero Hidden Fees</span>
-            <p className="text-xs text-gray-400 leading-relaxed">The processing cost of 5,500 BDT is transparently structured with no surcharge or emergency hidden fees.</p>
+            <span className="block font-bold text-white text-base">Special Exemptions Advice</span>
+            <p className="text-xs text-gray-400 leading-relaxed">We advise on specific exemptions, such as the housewife exemption (where only two photos are needed for Singapore, Malaysia & Thailand).</p>
           </div>
         </div>
       </div>
