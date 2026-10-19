@@ -6,9 +6,24 @@ export async function middleware(request: NextRequest) {
     request,
   });
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+  const isMasterAdmin = request.cookies.get('geo_admin_session')?.value === 'true';
+
+  // If Supabase keys are not set, allow requests without crashing
+  if (!supabaseUrl || !supabaseAnonKey) {
+    if (pathname.startsWith('/admin') && pathname !== '/admin/login' && !isMasterAdmin) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin/login';
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
@@ -32,11 +47,8 @@ export async function middleware(request: NextRequest) {
     const { data } = await supabase.auth.getUser();
     user = data.user;
   } catch (err) {
-    // If Supabase is unconfigured or unreachable during local dev without keys
     user = null;
   }
-
-  const pathname = request.nextUrl.pathname;
 
   // Protect dashboard routes: must be logged in
   if (pathname.startsWith('/dashboard') && !user) {
@@ -45,8 +57,6 @@ export async function middleware(request: NextRequest) {
     url.searchParams.set('redirectTo', pathname);
     return NextResponse.redirect(url);
   }
-
-  const isMasterAdmin = request.cookies.get('geo_admin_session')?.value === 'true';
 
   // Protect admin routes: must be admin role
   if (pathname.startsWith('/admin')) {
