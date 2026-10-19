@@ -1,0 +1,276 @@
+[
+  {
+    "country": "Singapore",
+    "flagCode": "singapore",
+    "price": "7,000 BDT",
+    "time": "10 Working Days",
+    "validity": "30 to 60 Days",
+    "photoType": "2 color photos on matte paper (white background)",
+    "overview": "Singapore e-visa is processed directly through accredited corporate travel agent channels with the Singapore Immigration & Checkpoints Authority (ICA).",
+    "specialNote": "Housewife Exemption: Housewives travelling with husband require only 2 photographs and a copy of their husband’s passport. No separate personal bank solvency or tax certificates needed.",
+    "categories": [
+      {
+        "name": "1. Personal Documents",
+        "items": [
+          "Original current Passport with validity ≥ 6 months from travel date",
+          "All previous expired or old passports (if any)",
+          "2 recent passport-size colour photographs taken on matte paper with clear white background",
+          "National ID (NID) card photocopy or Birth Certificate for minors"
+        ]
+      },
+      {
+        "name": "2. Financial Documents",
+        "items": [
+          "Original Bank Salary Statement (last 6 months) OR Personal Bank Statement with healthy closing balance",
+          "Bank Solvency Certificate signed and sealed by authorized branch manager",
+          "Last 3 months salary pay slips (for private corporate employees)"
+        ]
+      },
+      {
+        "name": "3. Professional / Occupation Credentials",
+        "items": [
+          "For Job Holders: Official No Objection Certificate (NOC) on company letterhead pad, Office ID card copy, and Visiting card",
+          "For Business Persons: Valid Trade License copy with notarized English translation, Company letterhead pad, and Visiting card",
+          "For Students: Student ID card copy and school/university tuition fee payment book photocopy",
+          "For Children / Dependents: Government birth registration certificate"
+        ]
+      }
+    ],
+    "terms": [
+      "Singapore visa approval is at the sole discretion of Singapore ICA.",
+      "Processing timeline begins the next working day after biometric & dossier submission."
+    ]
+  },
+  {
+    "country": "Thailand",
+    "flagCode": "thailand",
+    "price": "7,000 BDT",
+    "time": "7 Working Days",
+    "validity": "90 Days (Single Entry)",
+    "photoType": "2 color photos (35 × 45 mm, white background, matte paper)",
+    "overview": "Single-entry tourist sticker visa for leisure and vacation throughout Bangkok, Pattaya, Phuket, and Chiang Mai.",
+    "specialNote": "Housewives are fully exempt from submitting separate bank solvency. Submitting their spouse’s financial dossier and marriage certificate is sufficient.",
+    "categories": [
+      {
+        "name": "1. Identification & Personal Papers",
+        "items": [
+          "Current Passport with at least 6 months validity from departure date",
+          "All previously held passports",
+          "2 recent 35 × 45 mm photographs on matte paper with clean white background",
+          "National ID (NID) card copy"
+        ]
+      },
+      {
+        "name": "2. Financial Solvency",
+        "items": [
+          "Personal Bank Statement covering the last 6 months with verified transaction history",
+          "Bank Solvency Certificate from bank branch",
+          "Minimum ending balance recommended: ৳80,000 to ৳1,00,000 per traveler"
+        ]
+      },
+      {
+        "name": "3. Professional Documentation",
+        "items": [
+          "Job Holders: NOC letter issued by employer, official visiting card, and employee ID card",
+          "Business Owners: Updated trade license with certified notary, company visiting card & pad",
+          "Students: Institutional ID card & clearance letter from school/college",
+          "Housewives: Marriage deed (Nikahnama) and husband’s sponsor declaration"
+        ]
+      }
+    ],
+    "terms": [
+      "Visa processing time excludes public embassy holidays of Thailand and Bangladesh."
+    ]
+  },
+  {
+    "country": "Malaysia",
+    "flagCode": "malaysia",
+    "price": "5,500 BDT",
+    "time": "4 Working Days",
+    "validity": "90 Days (Single Entry)",
+    "photoType": "2 color photos on matte paper (white background)",
+    "overview": "Expedited tourist e-visa or sticker visa for Kuala Lumpur, Penang, Genting, and Langkawi holiday tours.",
+    "specialNote": "Fastest turnaround among Southeast Asian destinations (3 to 4 working days). Housewives do not require independent bank statements.",
+    "categories": [
+      {
+        "name": "1. Personal Requirements",
+        "items": [
+          "Passport valid for minimum 6 months beyond intended stay",
+          "2 recent studio photographs printed on matte finish paper with white background",
+          "Copy of National ID (NID) card",
+          "Old passports (if any)"
+        ]
+      },
+      {
+        "name": "2. Financial Papers",
+        "items": [
+          "Bank Statement for the last 6 months with adequate closing balance",
+          "Official Bank Solvency Certificate",
+          "For corporate sponsored trips: Company bank statement & sponsorship commitment letter"
+        ]
+      },
+      {
+        "name": "3. Profession Proof",
+        "items": [
+          "Employed: Company NOC certificate, office ID card, and visiting card",
+          "Business: Trade license copy with English notary, company profile, and visiting card",
+          "Student: Valid student identity card",
+          "Family / Minor: Birth registration certificate for all accompanying children"
+        ]
+      }
+    ]
+  },
+  {
+    "country": "China",
+    "flagCode": "china",
+    "price": "Dynamic (Call for Quote)",
+    "time": "12–20 Working Days",
+    "validity": "90 Days (30-day stay permit)",
+    "photoType": "35 × 45 mm, white background, matte paper (ears, eyes, and shoulders clear)",
+    "overview": "Chinese tourist (L) and business (M) visas for trade fairs (Guangzhou Canton Fair), commercial delegations, or leisure travel.",
+    "specialNote": "Physical Bank Statement mandatory! E-statements or internet printouts are strictly rejected by the Chinese Embassy.",
+    "categories": [
+      {
+        "name": "1. Personal Dossier",
+        "items": [
+          "Current and previous passports (minimum 8 months validity required)",
+          "Photo: 35 × 45 mm, matte paper, pure white background, ears, eyes, and shoulders visible with no hair covering forehead",
+          "National ID card copy and TIN Certificate",
+          "Police GD copy (mandatory if any old passport was ever lost in the past)",
+          "Complete China Visa Information Form filled accurately"
+        ]
+      },
+      {
+        "name": "2. Strict Financial Requirements",
+        "items": [
+          "Original physical Bank Statement for last 6 months (signed & stamped on every page by authorized bank officer)",
+          "Bank Solvency Certificate: Minimum balance of ৳3,00,000 for single applicant",
+          "Additional family members: +৳1,00,000 balance per accompanying dependent"
+        ]
+      },
+      {
+        "name": "3. Professional Documents by Category",
+        "items": [
+          "Job Holder: Company NOC on pad, Salary Certificate, Office ID card, Visiting card",
+          "Business Person: Trade License with notary, Company letterhead pad, Visiting card",
+          "Doctor: BMDC Registration Certificate, Visiting Card, NOC / Clinic pad",
+          "Lawyer: Bar Council License / Certificate, Visiting Card, Chamber pad",
+          "Student: Institutional NOC letter and Student ID card copy",
+          "Retired Person: Official retirement letter or government pension book"
+        ]
+      },
+      {
+        "name": "4. Accompanying Family & Logistics",
+        "items": [
+          "Marriage certificate (if traveling with spouse)",
+          "Children: Official Birth certificate copies",
+          "Confirmed round-trip airline ticket reservation",
+          "Official Invitation Letter (if applicable)"
+        ]
+      }
+    ],
+    "terms": [
+      "In case of visa rejection by the embassy, embassy fees and airline refund charges are borne by the applicant.",
+      "After approval, passport is collected from the Chinese Visa Center in Dhaka."
+    ]
+  },
+  {
+    "country": "Canada",
+    "flagCode": "canada",
+    "price": "10,000 BDT (Processing Fee)",
+    "time": "Consulate Timeline",
+    "validity": "Up to Passport Expiry (Multiple Entry)",
+    "photoType": "35 × 45 mm photographs",
+    "overview": "Comprehensive dossier compilation for Canadian Temporary Resident Visa (V-1 Visitor Visa) for tourism, visiting family, or conference attendance.",
+    "specialNote": "Extensive documentation screening required. GEO Trips organizes assets, bank wealth proof, and family registry trees to establish strong home ties.",
+    "categories": [
+      {
+        "name": "1. Identity & Vital Records",
+        "items": [
+          "Current original passport & all previous travel passports",
+          "National ID (NID) card and official Birth Certificate",
+          "Marriage Certificate (Nikahnama with English translation and notary)",
+          "Complete Family Information: Parents, siblings, and children details (full name, DOB, address)"
+        ]
+      },
+      {
+        "name": "2. Wealth & Asset Evaluation",
+        "items": [
+          "Personal Bank Statement covering past 6 months",
+          "Bank Solvency Certificate & FDR (Fixed Deposit Receipt) statements",
+          "TIN Certificate & Income Tax Assessment Acknowledgment Receipt",
+          "Property, land ownership deeds, flat deeds, vehicle registration, and share certificates with CA valuation"
+        ]
+      },
+      {
+        "name": "3. Career & Educational Credentials",
+        "items": [
+          "Proof of active employment (appointment letter, NOC, salary payslips, visiting card)",
+          "For business owners: Trade License, Article of Association, Tax receipts",
+          "Last educational certificate, degree completion session, and institution name"
+        ]
+      },
+      {
+        "name": "4. Sponsor / Invitation (if applicable)",
+        "items": [
+          "Canadian inviter’s PR card copy or Canadian passport photocopy",
+          "Inviter’s Notice of Assessment (NOA), employment letter, and utility bill or tenancy agreement",
+          "Formal signed Invitation Letter explaining stay arrangements and accommodation"
+        ]
+      }
+    ],
+    "terms": [
+      "Embassy biometric and visa issuance fee is payable directly to VFS Canada.",
+      "GEO Trips application review fee is 10,000 BDT per applicant."
+    ]
+  },
+  {
+    "country": "Australia",
+    "flagCode": "australia",
+    "price": "10,000 BDT (Processing Fee)",
+    "time": "20–35 Working Days",
+    "validity": "3 to 12 Months (Subclass 600)",
+    "photoType": "35 × 45 mm color photographs",
+    "overview": "Australia Visitor Visa (Subclass 600) Tourist and Sponsored Family stream application management directly via Australian Department of Home Affairs ImmiAccount.",
+    "specialNote": "Strong ties to Bangladesh are paramount. Our team compiles exhaustive documentation covering real estate, familial responsibilities, and ongoing employment commitments.",
+    "categories": [
+      {
+        "name": "1. Identity & Family Tree",
+        "items": [
+          "Original Passport and scanned color bio-pages of all previous passports",
+          "National ID Card & English-translated Birth Certificate",
+          "Marriage Certificate (Nikahnama) with official notary",
+          "Detailed Family Declaration: Details of parents, siblings, children, and spouse"
+        ]
+      },
+      {
+        "name": "2. Financial & Asset Verification",
+        "items": [
+          "Original 6 months Bank Statement with official bank stamp",
+          "Bank Solvency Certificate and FDR investment certificates",
+          "Income Tax Return acknowledgments for the last 3 assessment years",
+          "Asset deeds: Land, commercial properties, flat ownership, vehicle deeds, share portfolios"
+        ]
+      },
+      {
+        "name": "3. Occupation Documentation",
+        "items": [
+          "Corporate Staff: NOC certifying approved leave dates, office ID card, 3-6 months salary slips",
+          "Entrepreneurs: Company Trade License, Memorandum, company visiting card & bank ledger",
+          "Academic credentials: Last degree certificate, institution details, and study session"
+        ]
+      },
+      {
+        "name": "4. Travel Purpose & Sponsor (if applicable)",
+        "items": [
+          "Day-by-day Australian travel itinerary and intended hotel reservations",
+          "Australian inviter’s passport/visa copy, Proof of residence, Notice of Assessment, and Invitation Letter"
+        ]
+      }
+    ],
+    "terms": [
+      "Australian Department of Home Affairs visa application charges (AUD) are paid online via client card.",
+      "Processing fee is 10,000 BDT per applicant."
+    ]
+  }
+]

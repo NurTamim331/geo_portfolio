@@ -11,6 +11,17 @@ node_modules
 dist
 dist-ssr
 *.local
+.env*.local
+
+# Next.js build output & cache
+.next/
+out/
+build/
+.vercel
+*.tsbuildinfo
+
+# Legacy archives
+legacy_vite_src/
 
 # Editor directories and files
 .vscode/*
