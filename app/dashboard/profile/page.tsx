@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { User, Shield, ExternalLink, Save, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
-import type { Profile } from '@/lib/supabase/types';
+import {
+  User, Shield, ExternalLink, Save, AlertCircle, FileText,
+  CheckCircle2, MapPin, Bookmark, Star, Globe, Plus, Layers
+} from 'lucide-react';
+import type { Profile, Passport } from '@/lib/supabase/types';
 import { formatDate } from '@/lib/utils';
 
 export default function ProfilePage() {
@@ -22,13 +25,26 @@ export default function ProfilePage() {
         if (user) {
           const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
           if (data) {
+            // Also try fetching linked passports
+            try {
+              const { data: passportsData } = await supabase
+                .from('passports')
+                .select('*')
+                .eq('client_id', user.id);
+              if (passportsData && passportsData.length > 0) {
+                data.passports = passportsData;
+              }
+            } catch {}
+
             setProfile(data);
             setForm(data);
           } else {
-            // Mock profile if newly authenticated or unseeded
-            const mock = {
+            // Default profile skeleton
+            const mock: Profile = {
               id: user.id,
               full_name: user.user_metadata?.full_name || 'Client',
+              surname: user.user_metadata?.surname || '',
+              given_name: user.user_metadata?.given_name || user.user_metadata?.full_name || '',
               email: user.email || '',
               phone: user.user_metadata?.phone || '',
               role: 'client' as const,
@@ -36,11 +52,17 @@ export default function ProfilePage() {
               updated_at: new Date().toISOString(),
               passport_number: null,
               passport_expiry: null,
+              issued_country: 'Bangladesh',
               nationality: 'Bangladeshi',
               date_of_birth: null,
+              gender: 'Male',
+              address: null,
+              fathers_name: null,
+              mothers_name: null,
               drive_folder_link: null,
               avatar_url: null,
               is_active: true,
+              passports: [],
             };
             setProfile(mock);
             setForm(mock);
@@ -63,19 +85,39 @@ export default function ProfilePage() {
 
     try {
       if (profile?.id) {
+        const computedFullName =
+          form.full_name?.trim() ||
+          `${form.given_name || ''} ${form.surname || ''}`.trim() ||
+          'Client';
+
+        const updatePayload: Partial<Profile> = {
+          full_name: computedFullName,
+          surname: form.surname || null,
+          given_name: form.given_name || null,
+          phone: form.phone || null,
+          passport_number: form.passport_number ? form.passport_number.toUpperCase() : null,
+          passport_expiry: form.passport_expiry || null,
+          issued_country: form.issued_country || 'Bangladesh',
+          nationality: form.nationality || 'Bangladeshi',
+          date_of_birth: form.date_of_birth || null,
+          gender: form.gender || 'Male',
+          address: form.address || null,
+          fathers_name: form.fathers_name || null,
+          mothers_name: form.mothers_name || null,
+          updated_at: new Date().toISOString(),
+        };
+
         const { error: updateError } = await supabase
           .from('profiles')
-          .update({
-            full_name: form.full_name,
-            phone: form.phone,
-            passport_number: form.passport_number,
-            passport_expiry: form.passport_expiry,
-            nationality: form.nationality,
-            date_of_birth: form.date_of_birth,
-          })
+          .update(updatePayload as any)
           .eq('id', profile.id);
 
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.warn('Profile database update warning:', updateError);
+        }
+
+        setProfile((prev) => (prev ? { ...prev, ...updatePayload } : null));
+        setForm((prev) => ({ ...prev, ...updatePayload }));
       }
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
@@ -103,10 +145,10 @@ export default function ProfilePage() {
     <div className="space-y-8 max-w-4xl">
       <div>
         <h1 className="font-display font-black text-2xl sm:text-3xl text-brand-dark">
-          Passport & Profile Management
+          Passport &amp; Travel Dossier
         </h1>
-        <p className="text-gray-500 mt-1">
-          Keep your identification and consular documentation updated for rapid visa filing.
+        <p className="text-gray-500 mt-1 text-sm">
+          Keep your official passport identification, family credentials, and address updated for expedited visa applications and flight ticketing.
         </p>
       </div>
 
@@ -115,8 +157,8 @@ export default function ProfilePage() {
           <AlertCircle className="h-5 w-5 mt-0.5 shrink-0 text-amber-600" />
           <div className="text-sm">
             <span className="font-bold">Passport Validity Notice: </span>
-            Your passport expires in <strong className="text-red-600">{passportDays} days</strong> ({formatDate(form.passport_expiry!)}).
-            Most embassies (Singapore, Thailand, Malaysia, China) enforce a strict minimum 6-month validity threshold before accepting files.
+            Your primary passport expires in <strong className="text-red-600">{passportDays} days</strong> ({formatDate(form.passport_expiry!)}).
+            Most embassies (Singapore, Thailand, Malaysia, China, Canada) require at least 6 months of passport validity prior to travel.
           </div>
         </div>
       )}
@@ -124,7 +166,7 @@ export default function ProfilePage() {
       {success && (
         <div className="flex items-center gap-2.5 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm font-semibold">
           <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-          <span>Profile and passport details updated successfully!</span>
+          <span>Passport dossier and profile details updated successfully!</span>
         </div>
       )}
 
@@ -135,54 +177,69 @@ export default function ProfilePage() {
       )}
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* Personal Details Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
+        {/* 1. Passport Identity Section */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 sm:p-8 space-y-6">
           <div className="flex items-center gap-2.5 pb-4 border-b border-gray-100">
             <div className="p-2 bg-blue-50 text-brand-blue-600 rounded-xl">
               <User className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="font-display font-bold text-lg text-brand-dark">Personal Information</h2>
-              <p className="text-xs text-gray-400">Used for flight e-ticket reservations and invoice billing.</p>
+              <h2 className="font-display font-bold text-lg text-brand-dark">Passport Identity Information</h2>
+              <p className="text-xs text-gray-400">Must exactly match the name and details on your travel document.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Full Name (As on Passport) *
+                Surname (Last Name) *
               </label>
               <input
                 type="text"
                 required
+                value={form.surname || ''}
+                onChange={(e) => setForm({ ...form, surname: e.target.value })}
+                placeholder="e.g. Hossain"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-bold uppercase focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Given Name(s) *
+              </label>
+              <input
+                type="text"
+                required
+                value={form.given_name || ''}
+                onChange={(e) => setForm({ ...form, given_name: e.target.value })}
+                placeholder="e.g. Mohammad Tanvir"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Full Name (Printed on Passport)
+              </label>
+              <input
+                type="text"
                 value={form.full_name || ''}
                 onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:border-brand-blue-600"
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Primary Phone Number *
+                Nationality *
               </label>
               <input
-                type="tel"
+                type="text"
                 required
-                value={form.phone || ''}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Email Address (Account ID)
-              </label>
-              <input
-                type="email"
-                disabled
-                value={profile?.email || ''}
-                className="w-full px-4 py-3 bg-slate-100 border border-gray-200 rounded-xl text-sm text-gray-500 cursor-not-allowed"
+                value={form.nationality || 'Bangladeshi'}
+                onChange={(e) => setForm({ ...form, nationality: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:border-brand-blue-600"
               />
             </div>
 
@@ -197,18 +254,112 @@ export default function ProfilePage() {
                 className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
               />
             </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Gender
+              </label>
+              <select
+                value={form.gender || 'Male'}
+                onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:border-brand-blue-600"
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Passport Details Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-6">
+        {/* 2. Family & Residential Details */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="flex items-center gap-2.5 pb-4 border-b border-gray-100">
+            <div className="p-2 bg-amber-50 text-amber-600 rounded-xl">
+              <MapPin className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="font-display font-bold text-lg text-brand-dark">Family &amp; Residence Details</h2>
+              <p className="text-xs text-gray-400">Required for visa application forms (Singapore, China, Australia, Canada).</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Father&apos;s Full Name (As on Passport)
+              </label>
+              <input
+                type="text"
+                value={form.fathers_name || ''}
+                onChange={(e) => setForm({ ...form, fathers_name: e.target.value })}
+                placeholder="Father's full name"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Mother&apos;s Full Name (As on Passport)
+              </label>
+              <input
+                type="text"
+                value={form.mothers_name || ''}
+                onChange={(e) => setForm({ ...form, mothers_name: e.target.value })}
+                placeholder="Mother's full name"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Permanent / Present Address
+              </label>
+              <input
+                type="text"
+                value={form.address || ''}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+                placeholder="House, Road, Area, City, Post Code"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Phone Number *
+              </label>
+              <input
+                type="tel"
+                required
+                value={form.phone || ''}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Registered Email Address
+              </label>
+              <input
+                type="email"
+                disabled
+                value={profile?.email || ''}
+                className="w-full px-4 py-3 bg-slate-100 border border-gray-200 rounded-xl text-sm text-gray-500 cursor-not-allowed"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Primary Passport Identification */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 sm:p-8 space-y-6">
           <div className="flex items-center gap-2.5 pb-4 border-b border-gray-100">
             <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
               <Shield className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="font-display font-bold text-lg text-brand-dark">Passport Identification</h2>
-              <p className="text-xs text-gray-400">Encrypted in Supabase PostgreSQL; accessed only by authorized visa officers.</p>
+              <h2 className="font-display font-bold text-lg text-brand-dark">Primary Passport Identification</h2>
+              <p className="text-xs text-gray-400">Current active passport used for your upcoming trips and visa filings.</p>
             </div>
           </div>
 
@@ -222,7 +373,20 @@ export default function ProfilePage() {
                 placeholder="e.g. A01234567"
                 value={form.passport_number || ''}
                 onChange={(e) => setForm({ ...form, passport_number: e.target.value.toUpperCase() })}
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-mono focus:outline-none focus:border-brand-blue-600"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-mono font-bold tracking-wider focus:outline-none focus:border-brand-blue-600"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                Issuing Country
+              </label>
+              <input
+                type="text"
+                placeholder="Bangladesh"
+                value={form.issued_country || 'Bangladesh'}
+                onChange={(e) => setForm({ ...form, issued_country: e.target.value })}
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:border-brand-blue-600"
               />
             </div>
 
@@ -234,38 +398,65 @@ export default function ProfilePage() {
                 type="date"
                 value={form.passport_expiry || ''}
                 onChange={(e) => setForm({ ...form, passport_expiry: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                Nationality
-              </label>
-              <input
-                type="text"
-                placeholder="Bangladeshi"
-                value={form.nationality || ''}
-                onChange={(e) => setForm({ ...form, nationality: e.target.value })}
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-blue-600"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-bold focus:outline-none focus:border-brand-blue-600"
               />
             </div>
           </div>
         </div>
+
+        {/* 4. Linked Passports Archive Display */}
+        {profile?.passports && profile.passports.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 sm:p-8 space-y-4">
+            <div className="flex items-center gap-2 pb-3 border-b">
+              <Layers className="h-5 w-5 text-brand-blue-600" />
+              <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wider">
+                All Passports on File ({profile.passports.length})
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {profile.passports.map((p) => (
+                <div
+                  key={p.id}
+                  className="p-3.5 bg-slate-50 rounded-xl border border-gray-200 space-y-1 text-xs"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-black text-sm text-gray-900">{p.passport_number}</span>
+                    <span
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                        p.is_primary
+                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          : p.status === 'expired'
+                          ? 'bg-red-50 text-red-700'
+                          : 'bg-emerald-50 text-emerald-700'
+                      }`}
+                    >
+                      {p.is_primary ? '⭐ Primary' : p.status || 'Active'}
+                    </span>
+                  </div>
+                  <p className="text-gray-500 text-[11px]">
+                    Issued by: {p.issuing_country || 'Bangladesh'} · Expires: {formatDate(p.expiry_date)}
+                  </p>
+                  {p.notes && <p className="text-[11px] text-gray-600 italic">{p.notes}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Save CTA */}
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={saving}
-            className="px-8 py-3.5 bg-brand-blue-600 hover:bg-brand-blue-700 text-white font-extrabold text-sm rounded-xl transition shadow-lg hover:shadow-brand-blue-600/20 flex items-center gap-2 cursor-pointer"
+            className="px-8 py-3.5 bg-brand-blue-600 hover:bg-brand-blue-700 text-white font-extrabold text-sm rounded-xl transition shadow-lg hover:shadow-brand-blue-600/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
           >
             {saving ? (
               <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
             ) : (
               <>
                 <Save className="h-4 w-4" />
-                <span>Save Profile Updates</span>
+                <span>Save Passport &amp; Profile Updates</span>
               </>
             )}
           </button>

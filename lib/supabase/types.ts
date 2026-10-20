@@ -6,21 +6,53 @@
 
 export type UserRole = 'admin' | 'client';
 
+export type PassportType = 'ordinary' | 'official' | 'diplomatic' | 'special';
+export type PassportStatus = 'active' | 'expired' | 'cancelled' | 'lost';
+
+export interface Passport {
+  id: string;
+  created_at?: string;
+  updated_at?: string;
+  client_id: string;
+  passport_number: string;
+  surname?: string | null;
+  given_name?: string | null;
+  nationality?: string | null;
+  issuing_country: string;
+  issue_date?: string | null;
+  expiry_date: string | null;
+  date_of_birth?: string | null;
+  place_of_birth?: string | null;
+  passport_type?: PassportType;
+  status?: PassportStatus;
+  is_primary?: boolean;
+  notes?: string | null;
+  scan_url?: string | null;
+}
+
 export interface Profile {
   id: string;
   created_at: string;
   updated_at: string;
   full_name: string | null;
+  surname?: string | null;
+  given_name?: string | null;
   phone: string | null;
   email: string | null;
   role: UserRole;
   passport_number: string | null;
   passport_expiry: string | null;
+  issued_country?: string | null;
   nationality: string | null;
   date_of_birth: string | null;
+  gender?: string | null;
+  address?: string | null;
+  fathers_name?: string | null;
+  mothers_name?: string | null;
   drive_folder_link: string | null;
   avatar_url: string | null;
   is_active: boolean;
+  passports?: Passport[];
 }
 
 export type ServiceType = 'flight' | 'visa' | 'hotel' | 'tour_package' | 'hajj_umrah' | 'notice';
@@ -295,6 +327,7 @@ export type Database = {
       vendors: { Row: Vendor; Insert: Partial<Vendor>; Update: Partial<Vendor> };
       trip_leads: { Row: TripLead; Insert: Partial<TripLead>; Update: Partial<TripLead> };
       notices: { Row: Notice; Insert: Partial<Notice>; Update: Partial<Notice> };
+      passports: { Row: Passport; Insert: Partial<Passport>; Update: Partial<Passport> };
     };
     Views: {
       admin_financial_summary: { Row: AdminFinancialSummary };

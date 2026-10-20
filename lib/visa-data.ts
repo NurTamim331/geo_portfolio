@@ -1,4 +1,5 @@
 import type { VisaDetailData } from '@/components/visa/VisaDetailModal';
+export type { VisaDetailData };
 
 export const INITIAL_VISAS_DATA: VisaDetailData[] = [
   {

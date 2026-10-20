@@ -36,7 +36,7 @@ export function VisaManager({ initialVisas }: VisaManagerProps) {
       if (!res.ok) throw new Error(data.error || 'Failed to save');
 
       setVisas(updatedList);
-      showToast('Visa requirements and pricing updated successfully! Live on public website.');
+      showToast(data.message || 'Visa requirements and pricing updated successfully! Live on public website.');
       setEditingVisa(null);
       setIsAddingNew(false);
     } catch (err: any) {

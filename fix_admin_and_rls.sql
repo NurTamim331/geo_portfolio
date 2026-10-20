@@ -192,10 +192,95 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+-- 14. Expand PROFILES with Passport Dossier Fields and Create PASSPORTS Table
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS surname TEXT,
+  ADD COLUMN IF NOT EXISTS given_name TEXT,
+  ADD COLUMN IF NOT EXISTS issued_country TEXT,
+  ADD COLUMN IF NOT EXISTS address TEXT,
+  ADD COLUMN IF NOT EXISTS fathers_name TEXT,
+  ADD COLUMN IF NOT EXISTS mothers_name TEXT,
+  ADD COLUMN IF NOT EXISTS gender TEXT,
+  ADD COLUMN IF NOT EXISTS passports JSONB DEFAULT '[]'::jsonb;
+
+-- Passports Table (Allows clients to have multiple linked passports: current, old, dual citizenship)
+CREATE TABLE IF NOT EXISTS public.passports (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  client_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  passport_number TEXT NOT NULL,
+  surname TEXT,
+  given_name TEXT,
+  nationality TEXT DEFAULT 'Bangladeshi',
+  issuing_country TEXT DEFAULT 'Bangladesh',
+  issue_date DATE,
+  expiry_date DATE,
+  date_of_birth DATE,
+  place_of_birth TEXT,
+  passport_type TEXT DEFAULT 'ordinary',
+  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'expired', 'cancelled', 'lost')),
+  is_primary BOOLEAN DEFAULT FALSE,
+  notes TEXT,
+  scan_url TEXT
+);
+
+ALTER TABLE public.passports ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow manage passports" ON public.passports;
+CREATE POLICY "Allow manage passports" ON public.passports FOR ALL USING (true) WITH CHECK (true);
+
+-- 15. Enable Admin to Pre-Register Clients in CRM & Automatically Merge When Client Signs Up
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_id_fkey;
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+DECLARE
+  existing_id UUID;
+BEGIN
+  -- Check if an admin pre-registered this client by email or phone
+  SELECT id INTO existing_id
+  FROM public.profiles
+  WHERE (email IS NOT NULL AND LOWER(email) = LOWER(NEW.email))
+     OR (NEW.raw_user_meta_data ->> 'phone' IS NOT NULL AND phone IS NOT NULL AND phone = NEW.raw_user_meta_data ->> 'phone')
+  LIMIT 1;
+
+  IF existing_id IS NOT NULL THEN
+    -- Relink all client records (passports, invoices, payments, bookings) to the new authenticated user ID
+    UPDATE public.passports SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.invoices SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.payments SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.bookings SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.money_receipts SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.payment_verifications SET client_id = NEW.id WHERE client_id = existing_id;
+
+    -- Update the existing profile ID to match the auth.users ID
+    UPDATE public.profiles
+    SET
+      id = NEW.id,
+      email = NEW.email,
+      full_name = COALESCE(public.profiles.full_name, NEW.raw_user_meta_data ->> 'full_name', split_part(NEW.email, '@', 1)),
+      phone = COALESCE(public.profiles.phone, NEW.raw_user_meta_data ->> 'phone'),
+      updated_at = NOW()
+    WHERE id = existing_id;
+  ELSE
+    -- Completely new user registration on website
+    INSERT INTO public.profiles (
+      id, email, full_name, phone, role
+    ) VALUES (
+      NEW.id,
+      NEW.email,
+      COALESCE(NEW.raw_user_meta_data ->> 'full_name', split_part(NEW.email, '@', 1)),
+      NEW.raw_user_meta_data ->> 'phone',
+      'client'
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      email = EXCLUDED.email,
+      full_name = COALESCE(public.profiles.full_name, EXCLUDED.full_name);
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Done! Confirm completion:
-SELECT 'Database RLS policies successfully updated and recursion fixed!' AS status;
+SELECT 'Database RLS policies successfully updated, passport dossier fields added, and seamless CRM client merging enabled!' AS status;

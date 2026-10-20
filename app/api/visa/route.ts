@@ -1,75 +1,65 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import { INITIAL_VISAS_DATA } from '@/lib/visa-data';
+import { cookies } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-
-const DATA_FILE = path.join(process.cwd(), 'data', 'visas.json');
-
-function getVisasFromDisk() {
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const content = fs.readFileSync(DATA_FILE, 'utf-8');
-      const parsed = JSON.parse(content);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    }
-  } catch (err) {
-    console.error('Error reading visas from disk:', err);
-  }
-  return INITIAL_VISAS_DATA;
-}
-
-function saveVisasToDisk(visas: any[]) {
-  try {
-    const dir = path.dirname(DATA_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(DATA_FILE, JSON.stringify(visas, null, 2), 'utf-8');
-    return true;
-  } catch (err) {
-    console.error('Error writing visas to disk:', err);
-    return false;
-  }
-}
+import { getVisas, persistVisas } from '@/lib/visa-storage';
 
 export async function GET() {
-  const visas = getVisasFromDisk();
+  const visas = await getVisas();
   return NextResponse.json({ visas });
 }
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    // 1. Check for Admin authorization:
+    // Support either Master Admin cookie session or Supabase authenticated user with admin profile role
+    const cookieStore = await cookies();
+    const isMasterAdmin = cookieStore.get('geo_admin_session')?.value === 'true';
 
-    // Check admin permissions
-    if (user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
+    let isAdmin = isMasterAdmin;
+    if (!isAdmin) {
+      try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
 
-      if (profile?.role !== 'admin') {
-        return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
+          if (profile?.role === 'admin') {
+            isAdmin = true;
+          }
+        }
+      } catch (authErr) {
+        console.warn('Auth check error in /api/visa:', authErr);
       }
     }
 
+    if (!isAdmin) {
+      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
+    }
+
+    // 2. Validate payload
     const body = await request.json();
     if (!body || !Array.isArray(body.visas)) {
       return NextResponse.json({ error: 'Invalid payload: visas array required.' }, { status: 400 });
     }
 
-    const saved = saveVisasToDisk(body.visas);
-    if (!saved) {
-      return NextResponse.json({ error: 'Failed to write visas to storage.' }, { status: 500 });
-    }
+    // 3. Persist visas to Supabase Database with local disk and /tmp fallbacks
+    const result = await persistVisas(body.visas);
 
-    return NextResponse.json({ success: true, visas: body.visas });
+    return NextResponse.json({
+      success: true,
+      visas: body.visas,
+      savedToDb: result.savedToDb,
+      savedToDisk: result.savedToDisk,
+      message: result.savedToDb
+        ? 'Visa requirements and pricing saved permanently to cloud database.'
+        : 'Visa requirements updated in server cache.',
+    });
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message || 'Server error' }, { status: 500 });
+    console.error('Error in POST /api/visa:', err);
+    return NextResponse.json({ error: err?.message || 'Server error saving visa data' }, { status: 500 });
   }
 }

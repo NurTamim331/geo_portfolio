@@ -11,12 +11,14 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- 1. PROFILES TABLE (extends auth.users)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS public.profiles (
-  id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
 
-  -- Basic Info
+  -- Basic Info & Passport Identity
   full_name TEXT,
+  surname TEXT,
+  given_name TEXT,
   phone TEXT,
   email TEXT UNIQUE,
   role TEXT DEFAULT 'client' CHECK (role IN ('admin', 'client')),
@@ -24,11 +26,21 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   -- Passport Details
   passport_number TEXT,
   passport_expiry DATE,
-  nationality TEXT,
+  issued_country TEXT DEFAULT 'Bangladesh',
+  nationality TEXT DEFAULT 'Bangladeshi',
   date_of_birth DATE,
+  gender TEXT DEFAULT 'Male',
+
+  -- Family & Residence Information
+  address TEXT,
+  fathers_name TEXT,
+  mothers_name TEXT,
 
   -- Google Drive Link (Admin-assigned dedicated folder)
   drive_folder_link TEXT,
+
+  -- Multi-passport support (JSONB archive or relational via passports table)
+  passports JSONB DEFAULT '[]'::jsonb,
 
   -- Profile Metadata
   avatar_url TEXT,
@@ -81,17 +93,50 @@ CREATE POLICY "Allow delete profiles" ON public.profiles
 -- Auto-create profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  existing_id UUID;
 BEGIN
-  INSERT INTO public.profiles (id, email, full_name, phone)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    NEW.raw_user_meta_data ->> 'full_name',
-    NEW.raw_user_meta_data ->> 'phone'
-  )
-  ON CONFLICT (id) DO UPDATE SET
-    email = EXCLUDED.email,
-    full_name = COALESCE(EXCLUDED.full_name, public.profiles.full_name);
+  -- Check if an admin pre-registered this client by email or phone
+  SELECT id INTO existing_id
+  FROM public.profiles
+  WHERE (email IS NOT NULL AND LOWER(email) = LOWER(NEW.email))
+     OR (NEW.raw_user_meta_data ->> 'phone' IS NOT NULL AND phone IS NOT NULL AND phone = NEW.raw_user_meta_data ->> 'phone')
+  LIMIT 1;
+
+  IF existing_id IS NOT NULL THEN
+    -- Relink all client records (passports, invoices, payments, bookings) to the new authenticated user ID
+    UPDATE public.passports SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.invoices SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.payments SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.bookings SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.money_receipts SET client_id = NEW.id WHERE client_id = existing_id;
+    UPDATE public.payment_verifications SET client_id = NEW.id WHERE client_id = existing_id;
+
+    -- Update the existing profile ID to match the auth.users ID
+    UPDATE public.profiles
+    SET
+      id = NEW.id,
+      email = NEW.email,
+      full_name = COALESCE(public.profiles.full_name, NEW.raw_user_meta_data ->> 'full_name', split_part(NEW.email, '@', 1)),
+      phone = COALESCE(public.profiles.phone, NEW.raw_user_meta_data ->> 'phone'),
+      updated_at = NOW()
+    WHERE id = existing_id;
+  ELSE
+    -- Completely new user registration on website
+    INSERT INTO public.profiles (
+      id, email, full_name, phone, role
+    ) VALUES (
+      NEW.id,
+      NEW.email,
+      COALESCE(NEW.raw_user_meta_data ->> 'full_name', split_part(NEW.email, '@', 1)),
+      NEW.raw_user_meta_data ->> 'phone',
+      'client'
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      email = EXCLUDED.email,
+      full_name = COALESCE(public.profiles.full_name, EXCLUDED.full_name);
+  END IF;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -100,6 +145,35 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================================
+-- 1B. PASSPORTS TABLE (Multiple passports linked to client)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.passports (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  client_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  passport_number TEXT NOT NULL,
+  surname TEXT,
+  given_name TEXT,
+  nationality TEXT DEFAULT 'Bangladeshi',
+  issuing_country TEXT DEFAULT 'Bangladesh',
+  issue_date DATE,
+  expiry_date DATE,
+  date_of_birth DATE,
+  place_of_birth TEXT,
+  passport_type TEXT DEFAULT 'ordinary',
+  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'expired', 'cancelled', 'lost')),
+  is_primary BOOLEAN DEFAULT FALSE,
+  notes TEXT,
+  scan_url TEXT
+);
+
+ALTER TABLE public.passports ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow manage passports" ON public.passports;
+CREATE POLICY "Allow manage passports" ON public.passports FOR ALL USING (true) WITH CHECK (true);
+
 
 -- ============================================================
 -- 2. VENDORS TABLE

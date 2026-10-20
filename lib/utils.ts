@@ -15,7 +15,7 @@ export function formatCurrency(amount: number, currency = 'BDT'): string {
   }).format(amount);
 }
 
-export function formatDate(dateStr: string | null, fallback = 'N/A'): string {
+export function formatDate(dateStr: string | null | undefined, fallback = 'N/A'): string {
   if (!dateStr) return fallback;
   return new Date(dateStr).toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -53,7 +53,7 @@ export function getStatusColor(status: string): string {
   return map[status] ?? 'bg-gray-100 text-gray-700 border-gray-200';
 }
 
-export function getPassportDaysRemaining(expiry: string | null): number | null {
+export function getPassportDaysRemaining(expiry: string | null | undefined): number | null {
   if (!expiry) return null;
   const diff = new Date(expiry).getTime() - Date.now();
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
